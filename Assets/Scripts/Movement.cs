@@ -4,25 +4,41 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    //private bool leftKey = false;
-    //private bool rightKey = false;
-    public float rotationSpeed;
-    public float movementSpeed;
-    public float playerAngle;
+    //public float rotationSpeed;
+    //public float playerAngle;
+    public float horizontalSpeed;
+    public float verticalSpeed;
+    public float additionalSpeed;
+
+    float v;
+    //private float turnAmount;
+
     private Rigidbody2D rb;
-    // Start is called before the first frame update
+
+    private bool playerMoving;
+    private bool haveInput;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playerMoving = false;
+        haveInput = false;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
-        playerAngle -= Input.GetAxis("Horizontal") * rotationSpeed * Time.fixedDeltaTime;
-        rb.AddRelativeForce(new Vector2(0f, (Input.GetAxis("Vertical") * movementSpeed * Time.fixedDeltaTime)));
-        rb.MoveRotation(playerAngle);
+        haveInput = (Mathf.Abs(Input.GetAxisRaw("Horizontal")) + (Mathf.Abs(Input.GetAxisRaw("Vertical")))) != 0;
+        
+        playerMoving = haveInput;
+        if (playerMoving) {
+            rb.gravityScale = 0;
+        } else {
+            //rb.gravityScale = 1;
+        }
 
+        rb.AddForce(new Vector2((Input.GetAxis("Horizontal") * (horizontalSpeed + additionalSpeed) * Time.fixedDeltaTime), (Input.GetAxis("Vertical") * (verticalSpeed + additionalSpeed) * Time.fixedDeltaTime)));
 
+        v = rb.velocity.magnitude;
     }
 }
