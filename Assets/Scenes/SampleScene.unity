@@ -1229,8 +1229,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3acb4159e00cd1648b3dfc8c73c15d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationTime: 0.5
-  decelerationTime: 0.6
-  slide: 6
-  floatiness: 20
+  accelerationTime: 0.2
+  decelerationTime: 0.35
+  slide: 8
+  floatiness: 10
   speed: 7.25
+  dashPower: 1.3
+  dashCooldown: 1

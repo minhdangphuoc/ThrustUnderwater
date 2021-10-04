@@ -17,32 +17,49 @@ public class MovementNew : MonoBehaviour
 
     public float speed = 6f;
     public float dashPower = 10f;
+
+    public float dashCooldown = 1f;
+    private float dashCooldownTimer = 0f;
     
+    private bool haveMovementInput;
     private Vector2 velocity;
 
     void Start()
     {
-        //moveDirection.Set(1, 0);
+
     }
 
     void Update()
     {
         moveDirection.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveDirection.Normalize();
-        if (Input.GetAxisRaw("Horizontal") == 0f && Input.GetAxisRaw("Vertical") == 0f)
+        haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
+
+        if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && haveMovementInput)
         {
-            currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
-        } else
+            currentMovement = (currentMovement / 2) + moveDirection * dashPower;
+            dashCooldownTimer = dashCooldown;
+        } else if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && currentMovement.magnitude > 0.1f)
+        {
+            currentMovement = (currentMovement / 2) +  currentMovement.normalized * dashPower;
+            dashCooldownTimer = dashCooldown;
+        }
+        if (haveMovementInput)
         {
             currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
+        } else
+        {
+            currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         }
+        dashCooldownTimer -= Time.deltaTime;
+
         transform.Translate(currentMovement * speed * Time.deltaTime);
     }
 
     void OnGUI()
     {
-        GUI.Label(new Rect(25, 25, 200, 40), "speed: " + speed);
+        GUI.Label(new Rect(25, 25, 200, 40), "dash cd: " + dashCooldownTimer);
         GUI.Label(new Rect(25, 40, 200, 40), "dir: " + moveDirection);
-        GUI.Label(new Rect(25, 55, 200, 40), "dir: " + currentMovement.sqrMagnitude);
+        GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
     }
 }
