@@ -16,6 +16,7 @@ public class MovementNew : MonoBehaviour
     public float floatiness = 20f;
 
     public float speed = 6f;
+    public float dashPower = 10f;
     
     private Vector2 velocity;
 
@@ -30,10 +31,10 @@ public class MovementNew : MonoBehaviour
         moveDirection.Normalize();
         if (Input.GetAxisRaw("Horizontal") == 0f && Input.GetAxisRaw("Vertical") == 0f)
         {
-            currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / 6));
+            currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         } else
         {
-            currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / 20));
+            currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
         }
         transform.Translate(currentMovement * speed * Time.deltaTime);
     }
