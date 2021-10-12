@@ -70,7 +70,7 @@ public class MovementNew : MonoBehaviour
     /// <param name="other">The other Collider2D involved in this collision.</param>
     void OnTriggerEnter2D(Collider2D other)
     {
+        if(other.GetComponent<Power>()!= null) Destroy(other.gameObject);
         Debug.Log("Collide");
-        Destroy(other.gameObject);
     }
 }
