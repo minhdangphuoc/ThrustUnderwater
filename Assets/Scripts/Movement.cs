@@ -41,4 +41,5 @@ public class Movement : MonoBehaviour
 
         v = rb.velocity.magnitude;
     }
+    
 }

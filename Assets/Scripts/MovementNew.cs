@@ -62,4 +62,15 @@ public class MovementNew : MonoBehaviour
         GUI.Label(new Rect(25, 40, 200, 40), "dir: " + moveDirection);
         GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
     }
+
+    /// <summary>
+    /// Sent when another object enters a trigger collider attached to this
+    /// object (2D physics only).
+    /// </summary>
+    /// <param name="other">The other Collider2D involved in this collision.</param>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Debug.Log("Collide");
+        Destroy(other.gameObject);
+    }
 }
