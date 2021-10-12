@@ -1,0 +1,10 @@
+# Changelog
+All notable changes on dat.develop branch.
+
+## [Unreleased]
+
+## 10/12/2021 - Dat
+### Added
+-Add bubbles using particle system
+-Add Cinemachine to tell the camera to follow player
+-Add camera constraint so the camera can't go outside the map 
