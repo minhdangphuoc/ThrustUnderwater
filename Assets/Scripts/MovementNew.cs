@@ -29,7 +29,7 @@ public class MovementNew : MonoBehaviour
     
     private bool haveMovementInput;
     private Vector2 velocity;
-    private float tiltAngle;
+    
     
     void Start()
     {
@@ -42,10 +42,13 @@ public class MovementNew : MonoBehaviour
 
     void Update()
     {
+        
         moveDirection.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveDirection.Normalize();
         haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
         
+        if (Input.GetAxis("Horizontal") < 0) front_light_change_dir(90.0f);
+        else if (Input.GetAxis("Horizontal") > 0) front_light_change_dir(-90f);
 
         if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && haveMovementInput)
         {
@@ -58,21 +61,20 @@ public class MovementNew : MonoBehaviour
         }
         if (haveMovementInput)
         {
-            if (Input.GetAxis("Horizontal") < 0) tiltAngle = 90.0f;
-            else tiltAngle = -90f;
+            
             currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
         } else
         {
             currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         }
         dashCooldownTimer -= Time.deltaTime;
-        float tiltAroundZ =  tiltAngle;
-
-        Quaternion target = Quaternion.Euler(0, 0, tiltAroundZ);
         transform.Translate(currentMovement * speed * Time.deltaTime);
-        transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.GetChild(0).gameObject.transform.rotation, target,  Time.deltaTime* 5f);
     }
     
+    private void front_light_change_dir(float tiltAngle){
+        Quaternion target = Quaternion.Euler(0, 0, tiltAngle);
+        transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.GetChild(0).gameObject.transform.rotation, target,  Time.deltaTime * 10f);
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "orb")
         {
