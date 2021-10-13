@@ -26,11 +26,12 @@ public class MovementNew : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     void Update()
     {
+        
         moveDirection.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveDirection.Normalize();
         haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
