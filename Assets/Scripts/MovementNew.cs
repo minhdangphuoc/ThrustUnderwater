@@ -8,6 +8,8 @@ public class MovementNew : MonoBehaviour
     public GameObject[] Orbs;
     private int MAX_RANDOM_ORBS = 10;
     private string orb_name = "";
+    
+    
 
     Vector2 moveDirection;
     Vector2 currentMovement;
@@ -27,7 +29,8 @@ public class MovementNew : MonoBehaviour
     
     private bool haveMovementInput;
     private Vector2 velocity;
-
+    private float tiltAngle;
+    
     void Start()
     {
         for (int i = 0; i < MAX_RANDOM_ORBS; i++)
@@ -42,6 +45,7 @@ public class MovementNew : MonoBehaviour
         moveDirection.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveDirection.Normalize();
         haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
+        
 
         if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && haveMovementInput)
         {
@@ -54,14 +58,19 @@ public class MovementNew : MonoBehaviour
         }
         if (haveMovementInput)
         {
+            if (Input.GetAxis("Horizontal") < 0) tiltAngle = 90.0f;
+            else tiltAngle = -90f;
             currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
         } else
         {
             currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         }
         dashCooldownTimer -= Time.deltaTime;
+        float tiltAroundZ =  tiltAngle;
 
+        Quaternion target = Quaternion.Euler(0, 0, tiltAroundZ);
         transform.Translate(currentMovement * speed * Time.deltaTime);
+        transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.GetChild(0).gameObject.transform.rotation, target,  Time.deltaTime* 5f);
     }
     
     private void OnTriggerEnter2D(Collider2D other) {
