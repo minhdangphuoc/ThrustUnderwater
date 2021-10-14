@@ -5,22 +5,55 @@ using Cinemachine;
 
 public class CameraControl : MonoBehaviour
 {
-    public CinemachineVirtualCamera myCamera;
-    CinemachineBrain myBrain;
+    public CinemachineVirtualCamera mainCamera;
+
+    public CinemachineVirtualCamera subCamera;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        myBrain = GetComponent<CinemachineBrain>();
-        myCamera = GetComponent<CinemachineVirtualCamera>();
-        myCamera.enabled = true;
-        myBrain.enabled = true;
+        mainCamera = mainCamera.GetComponent<CinemachineVirtualCamera>();
+        subCamera = subCamera.GetComponent<CinemachineVirtualCamera>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
     }
 
+    /// <summary>
+    /// Sent when another object enters a trigger collider attached to this
+    /// object (2D physics only).
+    /// </summary>
+    /// <param name="other">The other Collider2D involved in this collision.</param>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.transform.tag == "Camera Change Zone"){
+            Debug.Log("Cam Change");
+            ChangeToSubCam();
+        }
+    }
+
+    /// <summary>
+    /// Sent when another object leaves a trigger collider attached to
+    /// this object (2D physics only).
+    /// </summary>
+    /// <param name="other">The other Collider2D involved in this collision.</param>
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if(other.transform.tag == "Camera Change Zone"){
+            ChangeToMainCam();
+        }
+    }
+
+    void ChangeToSubCam()
+    {
+        mainCamera.Priority = subCamera.Priority - 1;
+    }
+
+    void ChangeToMainCam()
+    {
+        mainCamera.Priority = subCamera.Priority;
+    }
 }
