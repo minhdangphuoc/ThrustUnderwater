@@ -30,7 +30,6 @@ public class CameraControl : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.transform.tag == "Camera Change Zone"){
-            Debug.Log("Cam Change");
             ChangeToSubCam();
         }
     }

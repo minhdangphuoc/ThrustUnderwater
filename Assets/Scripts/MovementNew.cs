@@ -64,4 +64,9 @@ public class MovementNew : MonoBehaviour
         GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
     }
 
+    public Vector2 shootDirection()
+    {
+        return moveDirection;
+    }
+
 }
