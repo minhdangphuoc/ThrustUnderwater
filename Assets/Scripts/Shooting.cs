@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-    public GameObject bullet;
+    GameObject bullet;
+
+    public GameObject [] projectile;
+    int currentProjectile = 0;
 
     public float bulletSpeed = 10f;
 
@@ -18,13 +21,20 @@ public class Shooting : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bullet = projectile[currentProjectile];
     }
 
     // Update is called once per frame
     void Update()
     {
+        //select firing projectile
+        SelectBullet();
+
+        //get player direction
         PlayerDirection = GetComponent<MovementNew>().shootDirection();
+        //check if player is moving
         playerIsMoving = PlayerDirection == new Vector2(0, 0);
+        //Shoot
         ShootToCursorPos();
     }
 
@@ -107,6 +117,27 @@ public class Shooting : MonoBehaviour
             return new Vector3(0, 0, 90);
         }
         else return new Vector3(0, 0,180 - Mathf.Atan2(PlayerDirection.y, PlayerDirection.x) * Mathf.Rad2Deg);
+    }
+
+
+    void SelectBullet()
+    {
+        if(Input.GetKeyDown(KeyCode.Alpha1)){
+            currentProjectile++;
+            if(currentProjectile >= projectile.Length){
+                currentProjectile = 0;
+            }
+            bullet = projectile[currentProjectile];
+            Debug.Log(currentProjectile);
+        }
+        else if(Input.GetKeyDown(KeyCode.Alpha2)){
+            currentProjectile--;
+            if(currentProjectile < 0){
+                currentProjectile = projectile.Length - 1;
+            }
+            bullet = projectile[currentProjectile];
+            Debug.Log(currentProjectile);
+        }
     }
     
 }
