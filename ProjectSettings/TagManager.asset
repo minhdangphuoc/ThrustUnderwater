@@ -7,6 +7,8 @@ TagManager:
   - Camera Change Zone
   - Projectile
   - Game Wall
+  - Camera Constraint
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -8,3 +8,13 @@ All notable changes on dat.develop branch.
 -Add bubbles using particle system
 -Add Cinemachine to tell the camera to follow player
 -Add camera constraint so the camera can't go outside the map 
+
+## 10/14/2021 - Dat
+### Added
+- Changing between virtual cameras
+- Add shooting mechanism
+
+## 10/18/2021 - Dat
+###Added
+- Projectile explosion VFX
+- Projectile deal damage

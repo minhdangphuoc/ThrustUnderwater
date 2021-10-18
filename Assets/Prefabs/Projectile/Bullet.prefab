@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2957351015917171577}
   - component: {fileID: 4091635681447939392}
   - component: {fileID: -2660066497378323277}
+  - component: {fileID: 6578296215081062099}
   m_Layer: 7
   m_Name: Bullet
   m_TagString: Projectile
@@ -134,3 +135,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2f8f6f4968d95447acd6114b680f102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explosionVFX: {fileID: 5842398443270801652, guid: 8e9fa425f30511348bd2beca41815f32, type: 3}
+  durationOfExplosion: 1
+--- !u!114 &6578296215081062099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8100228512895290178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0852e0bded65f4d4d82f5697f2c2a144, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 100
