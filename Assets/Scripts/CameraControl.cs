@@ -53,6 +53,6 @@ public class CameraControl : MonoBehaviour
 
     void ChangeToMainCam()
     {
-        mainCamera.Priority = subCamera.Priority;
+        mainCamera.Priority = subCamera.Priority + 1;
     }
 }
