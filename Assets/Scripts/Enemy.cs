@@ -30,6 +30,6 @@ public class Enemy : MonoBehaviour
         //decrease HP
         HP -= damageDealer.getDamage();
         //destroy game object
-        if (HP <= 0) Destroy(gameObject);
+        if (HP <= 0) Destroy(gameObject);  
     }
 }

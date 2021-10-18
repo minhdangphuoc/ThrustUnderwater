@@ -18,3 +18,4 @@ All notable changes on dat.develop branch.
 ###Added
 - Projectile explosion VFX
 - Projectile deal damage
+- Random enemy spawner
