@@ -124,6 +124,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HP: 500
+  moveSpeed: 3
+  roamRadius: 10
+  distanceToChasePlayer: 10
+  moveAccuracy: 1
 --- !u!50 &5845343762081185881
 Rigidbody2D:
   serializedVersion: 4

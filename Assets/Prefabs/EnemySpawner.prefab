@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8223704687022579613}
   - component: {fileID: 8223704687022579602}
   - component: {fileID: 8223704687022579612}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnObject:
-  - {fileID: 0}
-  maxSpawnAmount: 15
+  - {fileID: 7626828764674885105, guid: 0c75cb7d912389b44842f3ad5f2a2dee, type: 3}
+  maxSpawnAmount: 3
+  minDisBetweenObjs: 3
+  spawnRate: 2
 --- !u!61 &8223704687022579612
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -60,7 +62,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 2.407341, y: -2.9729078}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -71,5 +73,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 21.925972, y: 13.881409}
   m_EdgeRadius: 0

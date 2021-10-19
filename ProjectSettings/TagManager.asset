@@ -9,6 +9,7 @@ TagManager:
   - Game Wall
   - Camera Constraint
   - Enemy
+  - EnemySpawner
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Player
   - Projectile
   - Camera Constraint
-  - 
+  - Spawner
   - 
   - 
   - 

@@ -15,7 +15,12 @@ All notable changes on dat.develop branch.
 - Add shooting mechanism
 
 ## 10/18/2021 - Dat
-###Added
+### Added
 - Projectile explosion VFX
 - Projectile deal damage
 - Random enemy spawner
+
+## 10/19/2021 - Dat
+### Added
+- Enemy roams around randomly
+- Enemy chase player 

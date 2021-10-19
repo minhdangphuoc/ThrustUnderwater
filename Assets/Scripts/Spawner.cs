@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
 
     public int maxSpawnAmount = 5;
 
-    public float minDisBetweenObjs = 3;
+    public float minDisBetweenObjs = 3f;
 
     public float spawnRate = 2f;
 
@@ -28,7 +28,7 @@ public class Spawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(currentAmount);
+        
     }
 
     IEnumerator SpawnObject()
@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour
             //Not spawn near player
             if (Vector2.Distance(SpawnPosition, GameObject.FindWithTag("Player").transform.position) < minDisBetweenObjs*2) continue;
 
-            //spawn
+            //spawn if not too close
             if(isNotClose(SpawnPosition)) Instantiate(spawnObject[Random.Range(0, spawnObject.Length)], SpawnPosition, Quaternion.identity);
 
             yield return new WaitForSeconds(spawnRate);
@@ -50,7 +50,7 @@ public class Spawner : MonoBehaviour
     }
 
     /// <summary>
-    /// Check if there is an object nar the position
+    /// Check if there is an object near the position
     /// </summary>
     /// <param name="PosToCheck">position to check</param>
     /// <returns></returns>
