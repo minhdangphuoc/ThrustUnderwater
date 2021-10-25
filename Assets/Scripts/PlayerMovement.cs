@@ -47,8 +47,8 @@ public class PlayerMovement : MonoBehaviour
         moveDirection.Normalize();
         haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
         
-        if (Input.GetAxis("Horizontal") < 0) front_light_change_dir(90.0f);
-        else if (Input.GetAxis("Horizontal") > 0) front_light_change_dir(-90f);
+        //if (Input.GetAxis("Horizontal") < 0) front_light_change_dir(90.0f);
+        //else if (Input.GetAxis("Horizontal") > 0) front_light_change_dir(-90f);
 
         if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && haveMovementInput)
         {
@@ -61,7 +61,6 @@ public class PlayerMovement : MonoBehaviour
         }
         if (haveMovementInput)
         {
-            
             currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
         } else
         {
@@ -89,6 +88,6 @@ public class PlayerMovement : MonoBehaviour
         GUI.Label(new Rect(25, 25, 200, 40), "dash cd: " + dashCooldownTimer);
         GUI.Label(new Rect(25, 40, 200, 40), "dir: " + moveDirection);
         GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
-        GUI.Label(new Rect(25, 70, 200, 40), "Orb: " + orb_name);
+        //GUI.Label(new Rect(25, 70, 200, 40), "Orb: " + orb_name);
     }
 }
