@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    // Public Attribute
+    public GameObject[] Orbs;
+    private int MAX_RANDOM_ORBS = 10;
+    private string orb_name = "";
 
     public Vector2 moveDirection;
     public Vector2 currentMovement;
@@ -26,7 +30,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        
+        for (int i = 0; i < MAX_RANDOM_ORBS; i++)
+        {
+            int randomIndex = Random.Range(0, Orbs.Length);
+            GameObject instantiatedObject = Instantiate(Orbs[randomIndex], new Vector3(Random.Range(-10, 9) + 0.5f, Random.Range(-4, 3) + 0.5f, 0), Quaternion.identity) as GameObject;
+        }
     }
 
     void Update()
@@ -54,15 +62,22 @@ public class PlayerMovement : MonoBehaviour
         dashCooldownTimer -= Time.deltaTime;
 
         transform.Translate(currentMovement * speed * Time.deltaTime);
-
+    }
+    
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.tag == "orb")
+        {
+            orb_name = other.gameObject.name;
+            Destroy(other.gameObject);
+        } 
         
     }
-
 
     void OnGUI()
     {
         GUI.Label(new Rect(25, 25, 200, 40), "dash cd: " + dashCooldownTimer);
         GUI.Label(new Rect(25, 40, 200, 40), "dir: " + moveDirection);
         GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
+        GUI.Label(new Rect(25, 70, 200, 40), "Orb: " + orb_name);
     }
 }
