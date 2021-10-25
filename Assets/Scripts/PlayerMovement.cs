@@ -83,6 +83,11 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    public Vector2 shootDirection()
+    {
+        return moveDirection;
+    }
+
     void OnGUI()
     {
         GUI.Label(new Rect(25, 25, 200, 40), "dash cd: " + dashCooldownTimer);
