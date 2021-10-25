@@ -37,21 +37,7 @@ public class AnimationController : MonoBehaviour
         playerDirection = GetComponentInParent<PlayerMovement>().moveDirection;
         playerMovement = GetComponentInParent<PlayerMovement>().currentMovement;
         playerSpeed = playerMovement.magnitude;
-        
-        lastAngle = playerAngle;
-        playerAngle = Vector2.SignedAngle(Vector2.up, playerMovement);
-        spriteAngle = Mathf.SmoothDampAngle(spriteAngle, playerAngle, ref smoothVelocity, turnSpeed);
-        //angleChange = Mathf.Clamp(Vector2.SignedAngle(playerDirection, playerMovement), -120, 120);
-        angleChange = Mathf.Clamp(Mathf.DeltaAngle(playerAngle, spriteAngle), -90, 90);
-        cloakAngle = Mathf.SmoothDampAngle(cloakAngle, 180 + angleChange , ref smoothVelocity2, cloakTurnSpeed);
 
-        //headRotation = 
-        if (playerMovement != Vector2.zero)
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0, 0, spriteAngle)), maxSpeed * Time.deltaTime);
-            lowerBodyRotation = Quaternion.RotateTowards(lowerBodyRotation, Quaternion.Euler(new Vector3(0, 0, cloakAngle * Mathf.Sign(-lookDirection))), (maxCloakTurnSpeed * Time.deltaTime));
-            GameObject.Find("BoneCloakMiddleUpper").transform.localRotation = lowerBodyRotation;
-        }
         float angle = 0f;
         Vector3 angleAxis = Vector3.zero;
         (transform.rotation*Quaternion.Inverse(Quaternion.Euler(0, 0, 0))).ToAngleAxis(out angle, out angleAxis);
@@ -60,10 +46,28 @@ public class AnimationController : MonoBehaviour
             angle = -angle;
         }
         lookDirection = Mathf.DeltaAngle(0f, angle);
+        
+        lastAngle = playerAngle;
+        playerAngle = Vector2.SignedAngle(Vector2.up, playerMovement);
+        spriteAngle = Mathf.SmoothDampAngle(spriteAngle, playerAngle, ref smoothVelocity, turnSpeed);
+        //angleChange = Mathf.Clamp(Vector2.SignedAngle(playerDirection, playerMovement), -120, 120);
+        angleChange = Mathf.Clamp(Mathf.DeltaAngle(playerAngle, spriteAngle), -180, 180);
+        if (Mathf.Sign(transform.localScale.x) != Mathf.Sign(-lookDirection))
+        {
+            angleChange += 180 * Mathf.Sign(-lookDirection);
+            //angleChange *= -1;
+        }
+        cloakAngle = Mathf.SmoothDampAngle(cloakAngle, 180 + angleChange , ref smoothVelocity2, cloakTurnSpeed);
 
-        //angleChange = transform.localScale.x != Mathf.Sign(-lookDirection) ? angle : angleChange;
+        if (playerMovement != Vector2.zero)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(new Vector3(0, 0, spriteAngle)), maxSpeed * Time.deltaTime);
+            lowerBodyRotation = Quaternion.RotateTowards(lowerBodyRotation, Quaternion.Euler(new Vector3(0, 0, cloakAngle)), (maxCloakTurnSpeed * Time.deltaTime));
+            GameObject.Find("BoneCloakMiddleUpper").transform.localRotation = lowerBodyRotation;
+        }
 
         transform.localScale = new Vector3(Mathf.Sign(-lookDirection), 1, 1);
+        
     }
     void OnGUI()
     {

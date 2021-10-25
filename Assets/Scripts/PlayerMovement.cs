@@ -66,13 +66,18 @@ public class PlayerMovement : MonoBehaviour
         {
             currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         }
+        if (currentMovement.sqrMagnitude > 0.1)
+        {
+            front_light_change_dir(Vector2.SignedAngle(Vector2.up, currentMovement));
+        }
         dashCooldownTimer -= Time.deltaTime;
         transform.Translate(currentMovement * speed * Time.deltaTime);
     }
     
     private void front_light_change_dir(float tiltAngle){
         Quaternion target = Quaternion.Euler(0, 0, tiltAngle);
-        transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.GetChild(0).gameObject.transform.rotation, target,  Time.deltaTime * 10f);
+        Quaternion current = GameObject.Find("FrontLight").transform.rotation;
+        GameObject.Find("FrontLight").transform.rotation = Quaternion.Slerp(current, target,  Time.deltaTime * 10f);
     }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "orb")
