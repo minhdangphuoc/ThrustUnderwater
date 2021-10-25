@@ -1052,9 +1052,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caa073104ba5ee44798edcf15126984a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  facingLeft: 1
+  maxCloakTurnSpeed: 100
   turnSpeed: 0.15
   maxSpeed: 1000
+  cloakTurnSpeed: 0.1
 --- !u!1 &874400875
 GameObject:
   m_ObjectHideFlags: 0
@@ -1318,10 +1319,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0}
   currentMovement: {x: 0, y: 0}
-  accelerationTime: 0.22
+  accelerationTime: 0.3
   decelerationTime: 0.35
   slide: 8
   floatiness: 12
-  speed: 8
+  speed: 7
   dashPower: 1.3
   dashCooldown: 1
