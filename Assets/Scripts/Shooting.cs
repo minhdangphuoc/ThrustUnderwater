@@ -35,7 +35,7 @@ public class Shooting : MonoBehaviour
         SelectBullet();
 
         //get player direction 
-        PlayerDirection = GetComponent<MovementNew>().shootDirection();
+        PlayerDirection = GetComponent<PlayerMovement>().shootDirection();
         //get player position relative to screen point
         PlayerPosition = new Vector2(myCam.WorldToScreenPoint(transform.position).x - Screen.width/2, myCam.WorldToScreenPoint(transform.position).y - Screen.height/2);
         //check if player is moving
