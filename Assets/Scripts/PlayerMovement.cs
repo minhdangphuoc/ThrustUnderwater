@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     public GameObject[] Orbs;
     private int MAX_RANDOM_ORBS = 10;
     private string orb_name = "";
+    
+    
 
     public Vector2 moveDirection;
     public Vector2 currentMovement;
@@ -27,7 +29,8 @@ public class PlayerMovement : MonoBehaviour
     
     private bool haveMovementInput;
     private Vector2 velocity;
-
+    
+    
     void Start()
     {
         for (int i = 0; i < MAX_RANDOM_ORBS; i++)
@@ -39,9 +42,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        
         moveDirection.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         moveDirection.Normalize();
         haveMovementInput = (Input.GetAxisRaw("Horizontal") != 0f) || (Input.GetAxisRaw("Vertical") != 0f);
+        
+        if (Input.GetAxis("Horizontal") < 0) front_light_change_dir(90.0f);
+        else if (Input.GetAxis("Horizontal") > 0) front_light_change_dir(-90f);
 
         if (dashCooldownTimer <= 0 && Input.GetButtonDown("Dash") && haveMovementInput)
         {
@@ -54,16 +61,20 @@ public class PlayerMovement : MonoBehaviour
         }
         if (haveMovementInput)
         {
+            
             currentMovement = Vector2.SmoothDamp(currentMovement, moveDirection, ref velocity, accelerationTime + (currentMovement.sqrMagnitude / floatiness));
         } else
         {
             currentMovement = Vector2.SmoothDamp(currentMovement, Vector2.zero, ref velocity, decelerationTime + (currentMovement.sqrMagnitude / slide));
         }
         dashCooldownTimer -= Time.deltaTime;
-
         transform.Translate(currentMovement * speed * Time.deltaTime);
     }
     
+    private void front_light_change_dir(float tiltAngle){
+        Quaternion target = Quaternion.Euler(0, 0, tiltAngle);
+        transform.GetChild(0).gameObject.transform.rotation = Quaternion.Slerp(transform.GetChild(0).gameObject.transform.rotation, target,  Time.deltaTime * 10f);
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.tag == "orb")
         {
