@@ -9,7 +9,7 @@ public class Shooting : MonoBehaviour
     public GameObject [] projectile;
     int currentProjectile = 0;
 
-    public float bulletSpeed = 10f;
+    public float gunPower = 1000f;
 
     Vector2 PlayerDirection, PlayerPosition;
     bool playerIsMoving;
@@ -18,11 +18,14 @@ public class Shooting : MonoBehaviour
 
     Camera myCam;
 
+    Transform gun;
+
     Coroutine firingCoroutine, firingToMouseCoroutine;
 
     // Start is called before the first frame update
     void Start()
     {
+        gun = transform.GetChild(0);
         myCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 
         bullet = projectile[currentProjectile];
@@ -40,8 +43,12 @@ public class Shooting : MonoBehaviour
         PlayerPosition = new Vector2(myCam.WorldToScreenPoint(transform.position).x - Screen.width/2, myCam.WorldToScreenPoint(transform.position).y - Screen.height/2);
         //check if player is moving
         playerIsMoving = PlayerDirection == new Vector2(0, 0);
+        
+        //Rotate player
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(PlayerDirection.y, PlayerDirection.x) * Mathf.Rad2Deg));
+
         //Shoot
-        ShootToCursorPos();
+        Shoot();
     }
 
     /// <summary>
@@ -49,11 +56,11 @@ public class Shooting : MonoBehaviour
     /// </summary>
     void Shoot()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetMouseButtonDown(0))
         {
             firingCoroutine = StartCoroutine(FireContinously());
         }
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetMouseButtonUp(0))
         {
             StopCoroutine(firingCoroutine);
         }
@@ -86,7 +93,7 @@ public class Shooting : MonoBehaviour
             //Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
             //Instantiate bullet
-            GameObject projectile = Instantiate(bullet, transform.position, transform.rotation);
+            GameObject projectile = Instantiate(bullet, gun.transform.position, transform.rotation);
 
             //Rotate projectile according to mouse position
             float mouseAngle = Mathf.Atan2(mousePosition.y - PlayerPosition.y, mousePosition.x - PlayerPosition.x) * Mathf.Rad2Deg;
@@ -94,7 +101,8 @@ public class Shooting : MonoBehaviour
 
             //Add velocity
             Vector2 shootDirection = new Vector2(mousePosition.x - PlayerPosition.x, mousePosition.y - PlayerPosition.y);
-            projectile.GetComponent<Rigidbody2D>().velocity = shootDirection.normalized * bulletSpeed;
+            //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection.normalized * bulletSpeed;
+            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower * 1000);
 
             //Firing rate
             yield return new WaitForSeconds(firingPeriod);
@@ -111,16 +119,17 @@ public class Shooting : MonoBehaviour
         {
             //Calculate direction 
             bool playerIsMoving = PlayerDirection == new Vector2(0, 0);
-            Vector2 shootDirection = playerIsMoving ? new Vector2(1, 0) * bulletSpeed : PlayerDirection * bulletSpeed;
+            Vector2 shootDirection = playerIsMoving ? new Vector2(1, 0) : PlayerDirection;
 
             //Instantiate bullet
-            GameObject projectile = Instantiate(bullet, transform.position, transform.rotation);
+            GameObject projectile = Instantiate(bullet, gun.transform.position, transform.rotation);
 
             //Rotate projectile according to player's direction
             projectile.transform.eulerAngles = playerIsMoving ? new Vector3(0, 0, 90) : rotateProjectile();
 
             //Add velocity
-            projectile.GetComponent<Rigidbody2D>().velocity = shootDirection;
+            //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection;
+            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower * 1000);
 
             //Fire rate
             yield return new WaitForSeconds(firingPeriod);
