@@ -11,6 +11,7 @@ TagManager:
   - Camera Constraint
   - Enemy
   - EnemySpawner
+  - Dashable
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Projectile
   - Camera Constraint
   - Spawner
-  - 
+  - Dashable
   - 
   - 
   - 

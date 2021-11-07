@@ -88,6 +88,11 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
+    public void GrappleToPoint(Vector3 target)
+    {
+        transform.position = target;
+    }
+
     public Vector2 shootDirection()
     {
         return moveDirection;
