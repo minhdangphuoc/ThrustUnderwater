@@ -20,11 +20,17 @@ public class Shooting : MonoBehaviour
 
     Transform gun;
 
-    Coroutine firingCoroutine, firingToMouseCoroutine;
+    public int maxAmmo = 10;
+    public int ammo;
+    bool shooting = false;
+
+    Coroutine firingCoroutine, firingToMouseCoroutine, reloadCoroutine;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        ammo = maxAmmo;
         gun = transform.GetChild(0);
         myCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
 
@@ -44,11 +50,19 @@ public class Shooting : MonoBehaviour
         //check if player is moving
         playerIsMoving = PlayerDirection == new Vector2(0, 0);
         
-        //Rotate player
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(PlayerDirection.y, PlayerDirection.x) * Mathf.Rad2Deg));
-
         //Shoot
         Shoot();
+
+        //if(!shooting) reloadCoroutine = StartCoroutine(reload());
+        //else StopCoroutine(reloadCoroutine);
+    }
+
+    
+    IEnumerator reload()
+    {
+        yield return new WaitForSeconds(2f);
+        if(ammo < maxAmmo) ammo ++;
+        
     }
 
     /// <summary>
@@ -58,11 +72,18 @@ public class Shooting : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            firingCoroutine = StartCoroutine(FireContinously());
+            if(ammo >= bullet.GetComponent<Bullet>().ammoCount){
+               shooting = true;
+               firingCoroutine = StartCoroutine(FireContinously());
+            }
         }
         if (Input.GetMouseButtonUp(0))
         {
-            StopCoroutine(firingCoroutine);
+            if(shooting){
+               shooting = false;
+               StopCoroutine(firingCoroutine);
+            }
+            StartCoroutine(reload());
         }
     }
 
@@ -102,7 +123,8 @@ public class Shooting : MonoBehaviour
             //Add velocity
             Vector2 shootDirection = new Vector2(mousePosition.x - PlayerPosition.x, mousePosition.y - PlayerPosition.y);
             //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection.normalized * bulletSpeed;
-            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower * 1000);
+            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower, ForceMode2D.Impulse);
+
 
             //Firing rate
             yield return new WaitForSeconds(firingPeriod);
@@ -129,7 +151,8 @@ public class Shooting : MonoBehaviour
 
             //Add velocity
             //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection;
-            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower * 1000);
+            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower, ForceMode2D.Impulse);
+            ammo -= projectile.GetComponent<Bullet>().ammoCount;
 
             //Fire rate
             yield return new WaitForSeconds(firingPeriod);
@@ -157,6 +180,7 @@ public class Shooting : MonoBehaviour
 
     void SelectBullet()
     {
+        //press 1 to select next bullet
         if(Input.GetKeyDown(KeyCode.Alpha1)){
             currentProjectile++;
             if(currentProjectile >= projectile.Length){
@@ -164,6 +188,7 @@ public class Shooting : MonoBehaviour
             }
             bullet = projectile[currentProjectile];
         }
+        //press 2 to select previous bullet
         else if(Input.GetKeyDown(KeyCode.Alpha2)){
             currentProjectile--;
             if(currentProjectile < 0){
@@ -172,5 +197,7 @@ public class Shooting : MonoBehaviour
             bullet = projectile[currentProjectile];
         }
     }
+
+    
     
 }

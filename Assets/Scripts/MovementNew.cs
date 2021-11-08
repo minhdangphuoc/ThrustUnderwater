@@ -54,7 +54,10 @@ public class MovementNew : MonoBehaviour
         }
         dashCooldownTimer -= Time.deltaTime;
 
-        transform.Translate(currentMovement * speed * Time.deltaTime);
+        transform.Translate(currentMovement * speed * Time.deltaTime, Space.World);
+
+        //Rotate player
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg));
     }
 
     void OnGUI()

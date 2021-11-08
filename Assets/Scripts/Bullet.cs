@@ -7,7 +7,11 @@ public class Bullet : MonoBehaviour
     public GameObject explosionVFX;
     public float durationOfExplosion = 1f;
 
+    public int ammoCount = 1;
+
     Rigidbody2D myRB;
+
+    bool shooting;
 
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
@@ -26,6 +30,7 @@ public class Bullet : MonoBehaviour
             processExpolsion();
         }
     }
+
 
     void processExpolsion()
     {
