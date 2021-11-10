@@ -9,9 +9,10 @@ public class Bullet : MonoBehaviour
 
     public int ammoCount = 1;
 
+    public float firingPeriod = 0.5f; 
+
     Rigidbody2D myRB;
 
-    bool shooting;
 
     /// <summary>
     /// Update is called every frame, if the MonoBehaviour is enabled.
@@ -37,5 +38,10 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject);
         GameObject explosion = Instantiate(explosionVFX, transform.position, transform.rotation);
         Destroy(explosion, durationOfExplosion);
+    }
+
+    public float FiringPeriod
+    {
+        get{return firingPeriod;}
     }
 }

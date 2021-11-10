@@ -14,17 +14,16 @@ public class Shooting : MonoBehaviour
     Vector2 PlayerDirection, PlayerPosition;
     bool playerIsMoving;
 
-    public float firingPeriod = 2f;
-
     Camera myCam;
 
     Transform gun;
 
     public int maxAmmo = 10;
-    public int ammo;
+    int ammo;
+    public float reloadTime = 1f;
     bool shooting = false;
 
-    Coroutine firingCoroutine, firingToMouseCoroutine, reloadCoroutine;
+    Coroutine firingCoroutine, reloadCoroutine;
 
 
     // Start is called before the first frame update
@@ -51,84 +50,47 @@ public class Shooting : MonoBehaviour
         playerIsMoving = PlayerDirection == new Vector2(0, 0);
         
         //Shoot
-        Shoot();
+        StartCoroutine(Shoot());
 
-        //if(!shooting) reloadCoroutine = StartCoroutine(reload());
-        //else StopCoroutine(reloadCoroutine);
     }
 
     
     IEnumerator reload()
     {
-        yield return new WaitForSeconds(2f);
-        if(ammo < maxAmmo) ammo ++;
-        
+        //yield return new WaitForSeconds(reloadTime);
+        while(ammo < maxAmmo) {
+            yield return new WaitForSeconds(reloadTime);
+            ammo ++;
+        }
+    }
+
+    public int Ammo
+    {
+        get {return ammo;}
     }
 
     /// <summary>
     /// Shoot using player's direction
     /// </summary>
-    void Shoot()
+    IEnumerator Shoot()
     {
         if (Input.GetMouseButtonDown(0))
         {
             if(ammo >= bullet.GetComponent<Bullet>().ammoCount){
                shooting = true;
-               firingCoroutine = StartCoroutine(FireContinously());
+               firingCoroutine = StartCoroutine(FireContinously());        
             }
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            if(shooting){
-               shooting = false;
-               StopCoroutine(firingCoroutine);
-            }
-            StartCoroutine(reload());
-        }
-    }
-
-    /// <summary>
-    /// Shoot using mouse position
-    /// </summary>
-    void ShootToCursorPos()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-            firingToMouseCoroutine = StartCoroutine(FireToMouseContinously());
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            StopCoroutine(firingToMouseCoroutine);
+               shooting = false;
+               StopCoroutine(firingCoroutine);
+               reloadCoroutine = StartCoroutine(reload());
         }
-    }
 
-    /// <summary>
-    /// Shoot to mouse position
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator FireToMouseContinously()
-    {
-        while (true)
-        {
-            Vector2 mousePosition = new Vector2(Input.mousePosition.x - Screen.width/2, Input.mousePosition.y - Screen.height / 2);
-            //Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            //Instantiate bullet
-            GameObject projectile = Instantiate(bullet, gun.transform.position, transform.rotation);
-
-            //Rotate projectile according to mouse position
-            float mouseAngle = Mathf.Atan2(mousePosition.y - PlayerPosition.y, mousePosition.x - PlayerPosition.x) * Mathf.Rad2Deg;
-            projectile.transform.eulerAngles = new Vector3 (0,0,mouseAngle - 90);
-
-            //Add velocity
-            Vector2 shootDirection = new Vector2(mousePosition.x - PlayerPosition.x, mousePosition.y - PlayerPosition.y);
-            //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection.normalized * bulletSpeed;
-            projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower, ForceMode2D.Impulse);
-
-
-            //Firing rate
-            yield return new WaitForSeconds(firingPeriod);
-        }
+        if(shooting && reloadCoroutine != null) StopCoroutine(reloadCoroutine);
+        
+        yield return new WaitForSeconds(bullet.GetComponent<Bullet>().FiringPeriod);    
     }
 
     /// <summary>
@@ -139,44 +101,25 @@ public class Shooting : MonoBehaviour
     {
         while (true)
         {
+
             //Calculate direction 
-            bool playerIsMoving = PlayerDirection == new Vector2(0, 0);
             Vector2 shootDirection = playerIsMoving ? new Vector2(1, 0) : PlayerDirection;
 
             //Instantiate bullet
             GameObject projectile = Instantiate(bullet, gun.transform.position, transform.rotation);
 
             //Rotate projectile according to player's direction
-            projectile.transform.eulerAngles = playerIsMoving ? new Vector3(0, 0, 90) : rotateProjectile();
+            projectile.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan2(PlayerDirection.y, PlayerDirection.x) * Mathf.Rad2Deg - 90);
 
             //Add velocity
-            //projectile.GetComponent<Rigidbody2D>().velocity = shootDirection;
             projectile.GetComponent<Rigidbody2D>().AddForce(shootDirection.normalized * gunPower, ForceMode2D.Impulse);
             ammo -= projectile.GetComponent<Bullet>().ammoCount;
 
             //Fire rate
-            yield return new WaitForSeconds(firingPeriod);
+            yield return new WaitForSeconds(bullet.GetComponent<Bullet>().FiringPeriod);
         }
 
     }
-
-    /// <summary>
-    /// Calculate projectile's rotation
-    /// </summary>
-    /// <returns></returns>
-    Vector3 rotateProjectile()
-    {
-        if(PlayerDirection.x == 0)
-        {
-            return new Vector3(0, 0, 0);
-        }
-        else if (PlayerDirection.y == 0)
-        {
-            return new Vector3(0, 0, 90);
-        }
-        else return new Vector3(0, 0,180 - Mathf.Atan2(PlayerDirection.y, PlayerDirection.x) * Mathf.Rad2Deg);
-    }
-
 
     void SelectBullet()
     {
@@ -186,7 +129,6 @@ public class Shooting : MonoBehaviour
             if(currentProjectile >= projectile.Length){
                 currentProjectile = 0;
             }
-            bullet = projectile[currentProjectile];
         }
         //press 2 to select previous bullet
         else if(Input.GetKeyDown(KeyCode.Alpha2)){
@@ -194,10 +136,8 @@ public class Shooting : MonoBehaviour
             if(currentProjectile < 0){
                 currentProjectile = projectile.Length - 1;
             }
-            bullet = projectile[currentProjectile];
         }
-    }
 
-    
-    
+        bullet = projectile[currentProjectile];
+    }
 }

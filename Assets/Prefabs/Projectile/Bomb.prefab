@@ -98,7 +98,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 30
+  m_Mass: 15
   m_LinearDrag: 0.5
   m_AngularDrag: 0
   m_GravityScale: 0
@@ -138,6 +138,7 @@ MonoBehaviour:
   explosionVFX: {fileID: 5842398443270801652, guid: 38c9efc964ab5094fb43677a63419063, type: 3}
   durationOfExplosion: 1
   ammoCount: 5
+  firingPeriod: 2
 --- !u!114 &6539703535439472635
 MonoBehaviour:
   m_ObjectHideFlags: 0
