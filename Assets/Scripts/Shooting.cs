@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Shooting : MonoBehaviour
 {
     GameObject bullet;
+
+    public float PlayerHP = 100f;
 
     public GameObject [] projectile;
     int currentProjectile = 0;
@@ -19,6 +22,7 @@ public class Shooting : MonoBehaviour
     Transform gun;
 
     public int maxAmmo = 10;
+    
     int ammo;
     public float reloadTime = 1f;
     bool shooting = false;
@@ -67,6 +71,11 @@ public class Shooting : MonoBehaviour
     public int Ammo
     {
         get {return ammo;}
+    }
+
+    public float playerHP
+    {
+        get {return PlayerHP;}
     }
 
     /// <summary>
@@ -139,5 +148,25 @@ public class Shooting : MonoBehaviour
         }
 
         bullet = projectile[currentProjectile];
+    }
+
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(!other.gameObject.GetComponent<Enemy>()) return;
+
+        DamageDealer damage = other.gameObject.GetComponent<DamageDealer>();
+        if(damage){
+            PlayerHP -= damage.getDamage();
+
+            if(PlayerHP <= 0){
+                GetComponent<CircleCollider2D>().enabled = false;
+                SceneManager.LoadScene("Menu");
+            }
+        }
     }
 }

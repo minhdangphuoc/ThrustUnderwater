@@ -409,7 +409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -508, y: 248}
+  m_AnchoredPosition: {x: -508, y: -218}
   m_SizeDelta: {x: 250, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &925491994
@@ -2889,6 +2889,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8223704687022579602, guid: f8bb49268a395cb4fa5d57c24923af18, type: 3}
+      propertyPath: spawnRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8223704687022579602, guid: f8bb49268a395cb4fa5d57c24923af18, type: 3}
+      propertyPath: maxSpawnAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8223704687022579603, guid: f8bb49268a395cb4fa5d57c24923af18, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
@@ -2899,7 +2907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8223704687022579603, guid: f8bb49268a395cb4fa5d57c24923af18, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8223704687022579603, guid: f8bb49268a395cb4fa5d57c24923af18, type: 3}
       propertyPath: m_TagString

@@ -17,6 +17,10 @@ public class Enemy : MonoBehaviour
 
     public float moveAccuracy = 3f;
 
+    public float bounce = 5f;
+
+    public Animator animator;
+
     Vector2 startPosition, roamPosition;
 
     enum State
@@ -42,6 +46,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //GetComponent<Rigidbody2D>().AddForce(Vector2.up * bounce);
+
+        if(transform.rotation != Quaternion.Euler(Vector2.up)) transform.rotation = Quaternion.Euler(Vector2.up);
+
         StatesMachine();
     }
 
@@ -56,7 +64,16 @@ public class Enemy : MonoBehaviour
         //decrease HP
         HP -= damageDealer.getDamage();
         //destroy game object
-        if (HP <= 0) Destroy(gameObject);  
+        if (HP <= 0) StartCoroutine(enemyDies());  
+    }
+
+    IEnumerator enemyDies()
+    {
+        animator.SetBool("Dies",true);
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        yield return new WaitForSeconds(1f);
+
+        Destroy(gameObject);
     }
 
     void StatesMachine()
@@ -74,6 +91,7 @@ public class Enemy : MonoBehaviour
 
     void Roam()
     {
+        animator.SetBool("Back",true);
         //Move to random position
         transform.position = Vector2.MoveTowards(transform.position, roamPosition, moveSpeed * Time.deltaTime);
 
@@ -92,6 +110,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator ChasePlayer()
     {
+        animator.SetBool("Forward",true);
         //Move towards player
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
 
@@ -122,5 +141,17 @@ public class Enemy : MonoBehaviour
             }
         }
         return false;
+    }
+
+    /// <summary>
+    /// Sent when an incoming collider makes contact with this object's
+    /// collider (2D physics only).
+    /// </summary>
+    /// <param name="other">The Collision2D data associated with this collision.</param>
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        //bounce enemies if collide
+        Vector2 bounceDir = -(other.transform.position - transform.position);
+        GetComponent<Rigidbody2D>().AddForce(bounceDir.normalized * bounce);
     }
 }
