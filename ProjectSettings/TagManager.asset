@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - EnemySpawner
   - Dashable
+  - Safe Zone
   layers:
   - Default
   - TransparentFX

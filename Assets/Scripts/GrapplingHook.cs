@@ -4,39 +4,94 @@ using UnityEngine;
 
 public class GrapplingHook : MonoBehaviour
 {
-    Vector2 playerDirection, playerPosition;
+    Vector2 playerPosition;
     Vector2 mousePosition;
     bool playerIsMoving;
-    bool haveCollider;
 
-    public float grappleDistance = 1000f;
+    public float grappleDistance = 10f;
+    public float grappleSpeed = 5f;
+    Vector3 grapplePoint;
+    Vector3 hookPoint;
 
     Camera myCam;
 
+    LineRenderer lineRenderer;
+    bool isRendering;
+    bool haveGrapplePoint;
+    bool willDash;
+    bool canGrapple;
+    bool isReturning;
 
     void Start()
     {
         myCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+        lineRenderer = GetComponent<LineRenderer>();
+        //lineRenderer.SetPosition(0, Vector3.zero);
+        lineRenderer.positionCount = 2;
+        canGrapple = true;
     }
 
     
     void Update()
     {
-        
-
         //Shoot
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && canGrapple)
         {
-            //get player direction 
-            playerDirection = GetComponent<PlayerMovement>().shootDirection();
             RaycastHit2D rcHit = ShootToCursorPos();
-            if (rcHit.collider != null)
+            if (rcHit.collider != null && Vector3.Distance(rcHit.collider.transform.position, transform.position) < grappleDistance + 1.5f)
             {
-                haveCollider = !haveCollider;
-                GetComponent<PlayerMovement>().GrappleToPoint(rcHit.collider.transform.position);
+                grapplePoint = rcHit.collider.transform.position;
+                willDash = true;
+                //GetComponent<PlayerMovement>().GrappleToPoint(rcHit.collider.transform.position);
+            } else
+            {
+                Vector3 shootPoint = (mousePosition - playerPosition).normalized * grappleDistance;
+                grapplePoint = transform.position + shootPoint;
+                willDash = false;
+            }
+            haveGrapplePoint = true;
+            hookPoint = transform.position;
+            canGrapple = false;
+            isRendering = true;
+            isReturning = false;
+            lineRenderer.enabled = true;
+        }
+        if (haveGrapplePoint)
+        {
+            if (hookPoint != grapplePoint && !isReturning)
+            {
+                hookPoint = Vector3.MoveTowards(hookPoint, grapplePoint, grappleSpeed * Time.deltaTime * 10);
+            } else if (Vector3.Distance(hookPoint, transform.position) > 1 && isReturning)
+            {
+                hookPoint = Vector3.MoveTowards(hookPoint, transform.position, grappleSpeed * 2 * Time.deltaTime * 10);
+            } else
+            {
+                if (isReturning)
+                {
+                    EndGrapple();
+                } else if (willDash)
+                {
+                    GetComponent<PlayerMovement>().GrappleToPoint(grapplePoint);
+                } else
+                {
+                    isReturning = true;
+                }
             }
         }
-        
+        if (isRendering)
+        {
+            var points = new Vector3[2];
+            points[0] = transform.position;
+            points[1] = hookPoint;
+            lineRenderer.SetPositions(points);
+        }
+    }
+    public void EndGrapple()
+    {
+        canGrapple = true;
+        isRendering = false;
+        haveGrapplePoint = false;
+        lineRenderer.enabled = false;
     }
 
     /// <summary>

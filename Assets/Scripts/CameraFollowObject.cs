@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollowObject : MonoBehaviour
 {
-    Vector2 targetLocation;
+    public Vector2 targetLocation;
     Vector2 playerDirection;
     //Vector2 playerLocation;
 
