@@ -76,6 +76,6 @@ public class AnimationController : MonoBehaviour
     }
     void OnGUI()
     {
-        GUI.Label(new Rect(25, 70, 200, 40), "angle: " + angleChange);
+        //GUI.Label(new Rect(25, 70, 200, 40), "angle: " + angleChange);
     }
 }

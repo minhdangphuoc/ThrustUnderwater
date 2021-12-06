@@ -5,7 +5,7 @@ using UnityEngine;
 public class MovingBlobEnemyControl : MonoBehaviour
 {
 
-    GameObject blob, targetPoint;
+    private GameObject blob, targetPoint;
     float timer;
     public float spawnTime = 2f;
     bool shouldSpawn;
@@ -13,8 +13,9 @@ public class MovingBlobEnemyControl : MonoBehaviour
 
     void Start()
     {
-        blob = GameObject.Find("Blob");
-        targetPoint = GameObject.Find("TargetPoint");
+        blob = transform.Find("Blob").gameObject;
+        targetPoint = transform.Find("TargetPoint").gameObject;
+        //targetPoint = GameObject.Find("TargetPoint");
     }
 
     void Update()

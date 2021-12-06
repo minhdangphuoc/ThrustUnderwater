@@ -240,9 +240,11 @@ public class PlayerMovement : MonoBehaviour
 
     void OnGUI()
     {
+        /*
         GUI.Label(new Rect(25, 25, 200, 40), "dash cd: " + dashCooldownTimer);
         GUI.Label(new Rect(25, 40, 200, 40), "dir: " + moveDirection);
         GUI.Label(new Rect(25, 55, 200, 40), "speed: " + currentMovement.magnitude);
+        */
         //GUI.Label(new Rect(25, 70, 200, 40), "Orb: " + orb_name);
     }
 }
