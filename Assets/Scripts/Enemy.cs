@@ -17,7 +17,10 @@ public class Enemy : MonoBehaviour
 
     public float moveAccuracy = 3f;
 
+    public Animator animator;
+
     Vector2 startPosition, roamPosition;
+    Vector2 currentPosition, previousPosition;
 
     enum State
     {
@@ -33,6 +36,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
+        currentPosition = transform.position;
+        previousPosition = transform.position;
         roamPosition = RoamPosition();
         currentState = State.Roam;
 
@@ -42,6 +47,9 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (currentPosition == previousPosition)
+            currentState = State.Roam;
+
         StatesMachine();
     }
 
@@ -56,7 +64,7 @@ public class Enemy : MonoBehaviour
         //decrease HP
         HP -= damageDealer.getDamage();
         //destroy game object
-        if (HP <= 0) Destroy(gameObject);  
+        if (HP <= 0) Destroy(gameObject);
     }
 
     void StatesMachine()
@@ -74,8 +82,11 @@ public class Enemy : MonoBehaviour
 
     void Roam()
     {
+        animator.SetBool("Back", true);
+
         //Move to random position
         transform.position = Vector2.MoveTowards(transform.position, roamPosition, moveSpeed * Time.deltaTime);
+        currentPosition = transform.position;
 
         //if there are obstacles or reach destination then go to new position
         if (CheckCollisions(roamPosition - (Vector2)transform.position) || Vector2.Distance(transform.position, roamPosition) < moveAccuracy)
@@ -86,14 +97,18 @@ public class Enemy : MonoBehaviour
         //if near player start chasing
         if (Vector2.Distance(transform.position, player.transform.position) < distanceToChasePlayer)
         {
-            currentState = State.ChasePlayer;
+            if (!CheckCollisions(player.transform.position - transform.position))
+                currentState = State.ChasePlayer;
         }
     }
 
     IEnumerator ChasePlayer()
     {
+        animator.SetBool("Forward", true);
+
         //Move towards player
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+        currentPosition = transform.position;
 
         yield return new WaitForSeconds(moveAccuracy);
 
@@ -113,10 +128,10 @@ public class Enemy : MonoBehaviour
     bool CheckCollisions(Vector2 direction)
     {
         //Cast a ray to check for collisions
-        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position, direction.normalized, 10f);
-        foreach(var obj in hit)
+        RaycastHit2D[] hit = Physics2D.RaycastAll(transform.position, direction.normalized, moveAccuracy);
+        foreach (var obj in hit)
         {
-            if (obj.collider.tag != "EnemySpawner" && obj.collider.tag != "Camera Constraint" )
+            if (obj.collider.tag != "EnemySpawner" && obj.collider.tag != "Camera Constraint" && obj.collider.tag != "Enemy")
             {
                 return true;
             }
