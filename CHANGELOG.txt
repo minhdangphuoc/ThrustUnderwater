@@ -1,0 +1,26 @@
+# Changelog
+All notable changes on dat.develop branch.
+
+## [Unreleased]
+
+## 10/12/2021 - Dat
+### Added
+-Add bubbles using particle system
+-Add Cinemachine to tell the camera to follow player
+-Add camera constraint so the camera can't go outside the map 
+
+## 10/14/2021 - Dat
+### Added
+- Changing between virtual cameras
+- Add shooting mechanism
+
+## 10/18/2021 - Dat
+### Added
+- Projectile explosion VFX
+- Projectile deal damage
+- Random enemy spawner
+
+## 10/19/2021 - Dat
+### Added
+- Enemy roams around randomly
+- Enemy chase player 

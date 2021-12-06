@@ -5,6 +5,14 @@ TagManager:
   serializedVersion: 2
   tags:
   - orb
+  - Camera Change Zone
+  - Projectile
+  - Game Wall
+  - Camera Constraint
+  - Enemy
+  - EnemySpawner
+  - Dashable
+  - Safe Zone
   layers:
   - Default
   - TransparentFX
@@ -12,11 +20,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Projectile
+  - Camera Constraint
+  - Spawner
+  - Dashable
   - 
   - 
   - 
