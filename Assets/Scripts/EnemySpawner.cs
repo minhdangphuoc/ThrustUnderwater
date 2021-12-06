@@ -36,6 +36,7 @@ public class EnemySpawner : MonoBehaviour
             int enemyPF = Random.Range(0, enemy.Length);
 
             var enemies = FindObjectsOfType<Enemy>();
+            Debug.Log(enemies.Length);
 
             if (enemies.Length < maxSpawnCount)
             {
@@ -48,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
                 {
                     if (Vector2.Distance(obj.transform.position, GameObject.FindWithTag("Player").transform.position) > spawnDistance * 2)
                     {
-                        Destroy(obj);
+                        Destroy(obj.gameObject);
                         break;
                     }
                 }

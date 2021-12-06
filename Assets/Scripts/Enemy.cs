@@ -84,10 +84,9 @@ public class Enemy : MonoBehaviour
     {
         animator.SetBool("Back", true);
 
-        currentPosition = roamPosition;
-
         //Move to random position
         transform.position = Vector2.MoveTowards(transform.position, roamPosition, moveSpeed * Time.deltaTime);
+        currentPosition = transform.position;
 
         //if there are obstacles or reach destination then go to new position
         if (CheckCollisions(roamPosition - (Vector2)transform.position) || Vector2.Distance(transform.position, roamPosition) < moveAccuracy)
@@ -98,7 +97,8 @@ public class Enemy : MonoBehaviour
         //if near player start chasing
         if (Vector2.Distance(transform.position, player.transform.position) < distanceToChasePlayer)
         {
-            currentState = State.ChasePlayer;
+            if (!CheckCollisions(player.transform.position - transform.position))
+                currentState = State.ChasePlayer;
         }
     }
 
@@ -108,6 +108,7 @@ public class Enemy : MonoBehaviour
 
         //Move towards player
         transform.position = Vector2.MoveTowards(transform.position, player.transform.position, moveSpeed * Time.deltaTime);
+        currentPosition = transform.position;
 
         yield return new WaitForSeconds(moveAccuracy);
 
