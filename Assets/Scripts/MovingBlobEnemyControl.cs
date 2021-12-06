@@ -19,6 +19,7 @@ public class MovingBlobEnemyControl : MonoBehaviour
 
     void Update()
     {
+        blob.transform.Rotate(new Vector3 (0, 0, 0.5f));
         if (shouldSpawn)
         {
             blob.transform.position = transform.position;
