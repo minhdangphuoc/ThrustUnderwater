@@ -11,6 +11,8 @@ public class AnimationController : MonoBehaviour
     float playerAngle;
     float spriteAngle;
 
+    Animator animator;
+
     Quaternion bodyRotation;
     float headRotation;
     Quaternion lowerBodyRotation;
@@ -29,7 +31,7 @@ public class AnimationController : MonoBehaviour
 
     void Start()
     {
-
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -37,6 +39,8 @@ public class AnimationController : MonoBehaviour
         playerDirection = GetComponentInParent<PlayerMovement>().moveDirection;
         playerMovement = GetComponentInParent<PlayerMovement>().currentMovement;
         playerSpeed = playerMovement.magnitude;
+
+        animator.SetFloat("SwimSpeed", playerSpeed + 0.1f);
 
         float angle = 0f;
         Vector3 angleAxis = Vector3.zero;
